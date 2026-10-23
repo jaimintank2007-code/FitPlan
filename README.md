@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # FitPlan — Personal Fitness & Workout Planner
 
 A modern, responsive fitness web application built with clean, modular HTML5, CSS3, and Vanilla JavaScript. FitPlan features a dashboard layout inspired by fitness-tracking apps, combining a dark charcoal vertical sidebar, a light-grey workspace, vibrant lime-green accents, and interactive client-side features.
@@ -148,3 +149,9 @@ When showcasing FitPlan:
 
 ## 📄 License
 This project was created for personal fitness tracking and academic practical demonstrations. Feel free to use and customize it!
+=======
+# FitPlan
+it is simple fitness trocar website  
+>>>>>>> 89abf724467d9b7a31c5d4d7a60ddd8396e6681b
+#   F i t P l a n  
+ 

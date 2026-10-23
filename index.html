@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitPlan — Personal Fitness & Workout Planner</title>
+    <meta name="description" content="FitPlan is your personal fitness dashboard for tracking workouts, nutrition, water intake, and more.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- ==================== LEFT SIDEBAR ==================== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-top">
+                <div class="sidebar-logo" aria-label="FitPlan Logo">
+                    <span>FP</span>
+                </div>
+                <nav class="sidebar-nav" aria-label="Main Navigation">
+                    <button class="nav-item active" data-section="home" title="Home" aria-label="Home">
+                        <i data-lucide="home"></i>
+                    </button>
+                    <button class="nav-item" data-section="fitness" title="Fitness Overview" aria-label="Fitness Overview">
+                        <i data-lucide="activity"></i>
+                    </button>
+                    <button class="nav-item" data-section="workouts" title="Workout Plans" aria-label="Workout Plans">
+                        <i data-lucide="dumbbell"></i>
+                    </button>
+                    <button class="nav-item" data-section="activity" title="Activity Tracker" aria-label="Activity Tracker">
+                        <i data-lucide="flame"></i>
+                    </button>
+                    <button class="nav-item" data-section="calendar" title="Workout Calendar" aria-label="Workout Calendar">
+                        <i data-lucide="calendar"></i>
+                    </button>
+                </nav>
+            </div>
+            <div class="sidebar-bottom">
+                <button class="nav-item" data-section="profile" title="Profile" aria-label="Profile">
+                    <i data-lucide="user"></i>
+                </button>
+                <button class="nav-item" data-section="settings" title="Settings" aria-label="Settings">
+                    <i data-lucide="settings"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile bottom nav -->
+        <nav class="mobile-nav" id="mobileNav" aria-label="Mobile Navigation">
+            <button class="mobile-nav-item active" data-section="home" aria-label="Home"><i data-lucide="home"></i></button>
+            <button class="mobile-nav-item" data-section="fitness" aria-label="Fitness"><i data-lucide="activity"></i></button>
+            <button class="mobile-nav-item" data-section="workouts" aria-label="Workouts"><i data-lucide="dumbbell"></i></button>
+            <button class="mobile-nav-item" data-section="activity" aria-label="Activity"><i data-lucide="flame"></i></button>
+            <button class="mobile-nav-item" data-section="calendar" aria-label="Calendar"><i data-lucide="calendar"></i></button>
+            <button class="mobile-nav-item" data-section="profile" aria-label="Profile"><i data-lucide="user"></i></button>
+        </nav>
+
+        <!-- ==================== MAIN CONTENT ==================== -->
+        <main class="main-content" id="mainContent">
+
+            <!-- ========== HEADER ========== -->
+            <header class="dashboard-header">
+                <div class="header-welcome">
+                    <h1 id="greetingText">Good Evening, <span class="text-accent">Alex</span> 👋</h1>
+                    <p class="text-grey">Let's check your fitness journey today</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon" aria-label="Search" id="searchBtn" title="Search">
+                        <i data-lucide="search"></i>
+                    </button>
+                    <button class="btn-icon notification-btn" aria-label="Notifications" id="notifBtn" title="Notifications">
+                        <i data-lucide="bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <button class="btn-icon tablet-only-btn" aria-label="My Daily Plan" id="openDailyPlanBtn" title="My Daily Plan">
+                        <i data-lucide="calendar-check-2"></i>
+                    </button>
+                    <div class="user-avatar-header" id="headerAvatar" aria-label="User profile" title="Profile">
+                        <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100&h=100&fit=crop&crop=face" alt="Alex Morgan" width="44" height="44">
+                    </div>
+                </div>
+            </header>
+
+            <!-- ========== HOME SECTION ========== -->
+            <section class="section-content active" id="section-home">
+
+                <!-- Fitness Overview Card -->
+                <div class="section-title-row">
+                    <div class="title-with-badge">
+                        <h2 class="section-title">Fitness Overview</h2>
+                        <span class="summary-badge"><span class="pulse-dot"></span> Today's Summary</span>
+                    </div>
+                    <span class="current-date-badge" id="currentDateBadge">
+                        <i data-lucide="calendar"></i> Today's Live Stats
+                    </span>
+                </div>
+                <div class="fitness-overview" id="fitnessOverview">
+                    <div class="overview-left">
+                        <div class="overview-stat">
+                            <span class="overview-label">Daily Progress</span>
+                            <span class="overview-value" id="dailyProgressText">72%</span>
+                        </div>
+                        <div class="overview-stat">
+                            <span class="overview-label">Calories Burned</span>
+                            <span class="overview-value" id="caloriesBurnedText">420 <small>kcal</small></span>
+                        </div>
+                        <div class="overview-stat">
+                            <span class="overview-label">Workout Completed</span>
+                            <span class="overview-value" id="workoutCompletionText">65%</span>
+                        </div>
+                    </div>
+                    <div class="overview-right">
+                        <div class="circular-progress-group">
+                            <div class="circular-progress" data-value="65" data-color="#A3E635">
+                                <svg viewBox="0 0 100 100" width="90" height="90">
+                                    <circle class="progress-ring__bg" cx="50" cy="50" r="42" />
+                                    <circle class="progress-ring__circle" cx="50" cy="50" r="42" 
+                                        stroke="#A3E635" id="proteinRing" />
+                                </svg>
+                                <div class="progress-ring__text">
+                                    <span class="progress-ring__value" id="proteinValue">65%</span>
+                                </div>
+                                <span class="progress-ring__label">Protein</span>
+                            </div>
+                            <div class="circular-progress" data-value="48" data-color="#FBBF24">
+                                <svg viewBox="0 0 100 100" width="90" height="90">
+                                    <circle class="progress-ring__bg" cx="50" cy="50" r="42" />
+                                    <circle class="progress-ring__circle" cx="50" cy="50" r="42" 
+                                        stroke="#FBBF24" id="carbsRing" />
+                                </svg>
+                                <div class="progress-ring__text">
+                                    <span class="progress-ring__value" id="carbsValue">48%</span>
+                                </div>
+                                <span class="progress-ring__label">Carbs</span>
+                            </div>
+                            <div class="circular-progress" data-value="72" data-color="#F87171">
+                                <svg viewBox="0 0 100 100" width="90" height="90">
+                                    <circle class="progress-ring__bg" cx="50" cy="50" r="42" />
+                                    <circle class="progress-ring__circle" cx="50" cy="50" r="42" 
+                                        stroke="#F87171" id="fatRing" />
+                                </svg>
+                                <div class="progress-ring__text">
+                                    <span class="progress-ring__value" id="fatValue">72%</span>
+                                </div>
+                                <span class="progress-ring__label">Fat</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Targets 2x2 Grid -->
+                <h2 class="section-title mt-3">Daily Fitness Targets</h2>
+                <div class="targets-grid">
+                    <!-- Water Card -->
+                    <div class="target-card">
+                        <div class="target-card-header">
+                            <div class="target-icon water-icon">
+                                <i data-lucide="droplets"></i>
+                            </div>
+                            <span class="target-label">Water Intake</span>
+                        </div>
+                        <div class="target-value-row">
+                            <span class="target-value" id="waterValueHome">1500</span>
+                            <span class="target-unit">/ 3000 ml</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar__fill water-fill" id="waterProgressHome" style="width:50%"></div>
+                        </div>
+                        <button class="btn-sm btn-primary mt-1" id="addWaterHomeBtn">+ Add Water</button>
+                    </div>
+
+                    <!-- Calories Card -->
+                    <div class="target-card">
+                        <div class="target-card-header">
+                            <div class="target-icon calorie-icon">
+                                <i data-lucide="flame"></i>
+                            </div>
+                            <span class="target-label">Calories</span>
+                        </div>
+                        <div class="target-value-row">
+                            <span class="target-value" id="caloriesConsumedHome">1850</span>
+                            <span class="target-unit">/ 2200 kcal consumed</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar__fill calorie-fill" id="caloriesProgressHome" style="width:84%"></div>
+                        </div>
+                        <div class="target-sub-info">
+                            <span class="text-sm"><strong id="caloriesBurnedHome">420</strong> kcal burned</span>
+                        </div>
+                    </div>
+
+                    <!-- Weight Card -->
+                    <div class="target-card">
+                        <div class="target-card-header">
+                            <div class="target-icon weight-icon">
+                                <i data-lucide="scale"></i>
+                            </div>
+                            <span class="target-label">Weight</span>
+                        </div>
+                        <div class="target-value-row">
+                            <span class="target-value" id="weightValueHome">72</span>
+                            <span class="target-unit">kg</span>
+                        </div>
+                        <p class="text-sm text-grey mt-1">Target: 70 kg</p>
+                        <button class="btn-sm btn-secondary mt-1" id="updateWeightBtn">Update Weight</button>
+                    </div>
+
+                    <!-- Heart Rate Card -->
+                    <div class="target-card">
+                        <div class="target-card-header">
+                            <div class="target-icon heart-icon">
+                                <i data-lucide="heart-pulse"></i>
+                            </div>
+                            <span class="target-label">Heart Rate</span>
+                        </div>
+                        <div class="target-value-row">
+                            <span class="target-value heart-pulse-anim" id="heartRateValue">72</span>
+                            <span class="target-unit">BPM</span>
+                        </div>
+                        <p class="text-sm text-grey mt-1">Resting heart rate</p>
+                        <span class="demo-badge">Demo Data</span>
+                    </div>
+                </div>
+
+                <!-- New Activity Section -->
+                <h2 class="section-title mt-3">New Activity</h2>
+                <div class="activity-cards">
+                    <!-- Drinking Tracker -->
+                    <div class="activity-card" id="activityWater">
+                        <img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400&h=300&fit=crop" 
+                             alt="Person drinking water" loading="lazy" width="400" height="300">
+                        <div class="activity-card-overlay">
+                            <h3>Drinking Tracker</h3>
+                            <p>Stay hydrated for peak performance</p>
+                            <button class="activity-card-btn" data-action="water" aria-label="Open water tracker">
+                                <i data-lucide="arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Daily Exercise -->
+                    <div class="activity-card" id="activityExercise">
+                        <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=400&h=300&fit=crop" 
+                             alt="Person exercising with dumbbells" loading="lazy" width="400" height="300">
+                        <div class="activity-card-overlay">
+                            <h3>Daily Exercise</h3>
+                            <p>45 min workout planned</p>
+                            <button class="activity-card-btn" data-action="workout" aria-label="Start workout">
+                                <i data-lucide="arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Sleep Tracker -->
+                    <div class="activity-card" id="activitySleep">
+                        <img src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=400&h=300&fit=crop" 
+                             alt="Peaceful sleep scene" loading="lazy" width="400" height="300">
+                        <div class="activity-card-overlay">
+                            <h3>Sleep Tracker</h3>
+                            <p>Track your rest for recovery</p>
+                            <button class="activity-card-btn" data-action="sleep" aria-label="Open sleep tracker">
+                                <i data-lucide="arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== FITNESS OVERVIEW SECTION ========== -->
+            <section class="section-content" id="section-fitness">
+                <h2 class="section-title">Fitness Overview</h2>
+                <p class="text-grey mb-3">Your comprehensive fitness statistics and progress</p>
+
+                <!-- BMI Calculator -->
+                <div class="card bmi-card">
+                    <h3 class="card-title"><i data-lucide="calculator"></i> BMI Calculator</h3>
+                    <p class="text-sm text-grey mb-2">Calculate your Body Mass Index</p>
+                    <div class="bmi-form">
+                        <div class="form-group">
+                            <label for="bmiHeight">Height (cm)</label>
+                            <input type="number" id="bmiHeight" placeholder="e.g. 175" min="50" max="300" value="175" aria-label="Height in centimetres">
+                        </div>
+                        <div class="form-group">
+                            <label for="bmiWeight">Weight (kg)</label>
+                            <input type="number" id="bmiWeight" placeholder="e.g. 72" min="10" max="500" value="72" aria-label="Weight in kilograms">
+                        </div>
+                        <button class="btn-primary" id="calculateBmiBtn">Calculate BMI</button>
+                    </div>
+                    <div class="bmi-result hidden" id="bmiResult">
+                        <div class="bmi-value-display">
+                            <span class="bmi-number" id="bmiNumber">--</span>
+                            <span class="bmi-category" id="bmiCategory">--</span>
+                        </div>
+                        <div class="bmi-scale">
+                            <div class="bmi-scale-bar">
+                                <div class="bmi-indicator" id="bmiIndicator"></div>
+                            </div>
+                            <div class="bmi-scale-labels">
+                                <span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Water Intake Tracker -->
+                <div class="card water-tracker-card mt-3">
+                    <h3 class="card-title"><i data-lucide="droplets"></i> Water Intake Tracker</h3>
+                    <div class="water-tracker-display">
+                        <div class="water-visual">
+                            <div class="water-bottle">
+                                <div class="water-bottle-fill" id="waterBottleFill" style="height:50%"></div>
+                            </div>
+                        </div>
+                        <div class="water-info">
+                            <div class="water-amount">
+                                <span class="water-current" id="waterCurrent">1500</span>
+                                <span class="water-unit">ml</span>
+                            </div>
+                            <div class="water-goal-text">Goal: <strong id="waterGoalText">3000 ml</strong></div>
+                            <div class="progress-bar lg mt-1">
+                                <div class="progress-bar__fill water-fill" id="waterProgressFitness" style="width:50%"></div>
+                            </div>
+                            <div class="water-actions mt-2">
+                                <button class="btn-primary btn-sm" id="addWater250">+ 250 ml</button>
+                                <button class="btn-primary btn-sm" id="addWater500">+ 500 ml</button>
+                                <button class="btn-secondary btn-sm" id="addWaterCustom">Custom</button>
+                                <button class="btn-secondary btn-sm" id="resetWater">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="water-history mt-2" id="waterHistory">
+                        <h4 class="text-sm text-grey">Today's Log</h4>
+                        <ul class="water-log-list" id="waterLogList">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Fitness Quiz -->
+                <div class="card quiz-card mt-3">
+                    <h3 class="card-title"><i data-lucide="brain"></i> Fitness Knowledge Quiz</h3>
+                    <p class="text-sm text-grey mb-2">Test your fitness knowledge with 5 quick questions</p>
+                    <div class="quiz-container" id="quizContainer">
+                        <div class="quiz-progress-bar">
+                            <div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div>
+                        </div>
+                        <div class="quiz-question" id="quizQuestion">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="quiz-options" id="quizOptions">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="quiz-nav">
+                            <span class="quiz-counter" id="quizCounter">Question 1 of 5</span>
+                            <button class="btn-primary" id="quizNextBtn" disabled>Next</button>
+                        </div>
+                    </div>
+                    <div class="quiz-result hidden" id="quizResult">
+                        <div class="quiz-score-circle">
+                            <span class="quiz-score-value" id="quizScoreValue">0</span>
+                            <span class="quiz-score-total">/ 5</span>
+                        </div>
+                        <p class="quiz-feedback" id="quizFeedback">--</p>
+                        <button class="btn-primary mt-2" id="retakeQuizBtn">Retake Quiz</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== WORKOUT PLANS SECTION ========== -->
+            <section class="section-content" id="section-workouts">
+                <h2 class="section-title">Workout Plans</h2>
+                <p class="text-grey mb-3">Choose your difficulty and get started</p>
+
+                <!-- Difficulty Tabs -->
+                <div class="difficulty-tabs" role="tablist">
+                    <button class="difficulty-tab active" data-plan="beginner" role="tab" aria-selected="true">
+                        <i data-lucide="zap"></i> Beginner
+                    </button>
+                    <button class="difficulty-tab" data-plan="intermediate" role="tab" aria-selected="false">
+                        <i data-lucide="trending-up"></i> Intermediate
+                    </button>
+                    <button class="difficulty-tab" data-plan="advanced" role="tab" aria-selected="false">
+                        <i data-lucide="trophy"></i> Advanced
+                    </button>
+                </div>
+
+                <!-- Workout Progress -->
+                <div class="workout-progress-bar mt-2">
+                    <div class="workout-progress-info">
+                        <span>Workout Progress</span>
+                        <span id="workoutProgressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar__fill" id="workoutProgressBar" style="width:0%"></div>
+                    </div>
+                </div>
+
+                <!-- Exercise List -->
+                <div class="exercise-list mt-2" id="exerciseList">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Workout Actions -->
+                <div class="workout-actions mt-2">
+                    <button class="btn-primary" id="startWorkoutBtn">
+                        <i data-lucide="play"></i> Start Workout
+                    </button>
+                    <button class="btn-secondary" id="resetWorkoutBtn">
+                        <i data-lucide="rotate-ccw"></i> Reset Day
+                    </button>
+                </div>
+
+                <!-- Workout Timer (hidden by default) -->
+                <div class="workout-timer hidden" id="workoutTimer">
+                    <div class="timer-display">
+                        <span class="timer-value" id="timerValue">00:00</span>
+                    </div>
+                    <div class="timer-actions">
+                        <button class="btn-secondary" id="pauseTimerBtn"><i data-lucide="pause"></i> Pause</button>
+                        <button class="btn-primary" id="stopTimerBtn"><i data-lucide="square"></i> Stop</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== ACTIVITY TRACKER SECTION ========== -->
+            <section class="section-content" id="section-activity">
+                <h2 class="section-title">Activity Tracker</h2>
+                <p class="text-grey mb-3">Today's activity summary</p>
+                <span class="demo-badge mb-2">Demonstration Data</span>
+
+                <div class="activity-stats-grid">
+                    <div class="activity-stat-card">
+                        <div class="activity-stat-icon steps-icon"><i data-lucide="footprints"></i></div>
+                        <div class="activity-stat-info">
+                            <span class="activity-stat-value" id="stepsValue">8,432</span>
+                            <span class="activity-stat-label">Steps Today</span>
+                        </div>
+                        <div class="progress-bar sm">
+                            <div class="progress-bar__fill" style="width:84%;background:#A3E635"></div>
+                        </div>
+                        <span class="text-sm text-grey">Goal: 10,000</span>
+                    </div>
+                    <div class="activity-stat-card">
+                        <div class="activity-stat-icon cal-icon"><i data-lucide="flame"></i></div>
+                        <div class="activity-stat-info">
+                            <span class="activity-stat-value" id="activeCalValue">420</span>
+                            <span class="activity-stat-label">Calories Burned</span>
+                        </div>
+                        <div class="progress-bar sm">
+                            <div class="progress-bar__fill" style="width:70%;background:#FBBF24"></div>
+                        </div>
+                        <span class="text-sm text-grey">Goal: 600 kcal</span>
+                    </div>
+                    <div class="activity-stat-card">
+                        <div class="activity-stat-icon time-icon"><i data-lucide="timer"></i></div>
+                        <div class="activity-stat-info">
+                            <span class="activity-stat-value">45</span>
+                            <span class="activity-stat-label">Active Minutes</span>
+                        </div>
+                        <div class="progress-bar sm">
+                            <div class="progress-bar__fill" style="width:75%;background:#60A5FA"></div>
+                        </div>
+                        <span class="text-sm text-grey">Goal: 60 min</span>
+                    </div>
+                    <div class="activity-stat-card">
+                        <div class="activity-stat-icon dist-icon"><i data-lucide="map-pin"></i></div>
+                        <div class="activity-stat-info">
+                            <span class="activity-stat-value">5.2</span>
+                            <span class="activity-stat-label">Distance (km)</span>
+                        </div>
+                        <div class="progress-bar sm">
+                            <div class="progress-bar__fill" style="width:65%;background:#F87171"></div>
+                        </div>
+                        <span class="text-sm text-grey">Goal: 8 km</span>
+                    </div>
+                </div>
+
+                <!-- Daily Workout Checklist -->
+                <div class="card mt-3">
+                    <h3 class="card-title"><i data-lucide="clipboard-check"></i> Daily Workout Checklist</h3>
+                    <div class="checklist" id="dailyChecklist">
+                        <label class="checklist-item">
+                            <input type="checkbox" id="check-warmup"> <span>Morning Warm-up (10 min)</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" id="check-cardio"> <span>Cardio Session (20 min)</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" id="check-strength"> <span>Strength Training (30 min)</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" id="check-stretch"> <span>Stretching & Cool Down (10 min)</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" id="check-water"> <span>Drink 3L Water</span>
+                        </label>
+                    </div>
+                    <div class="checklist-progress mt-2">
+                        <span class="text-sm text-grey">Completed: <strong id="checklistCount">0</strong>/5</span>
+                        <div class="progress-bar sm">
+                            <div class="progress-bar__fill" id="checklistProgress" style="width:0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== CALENDAR SECTION ========== -->
+            <section class="section-content" id="section-calendar">
+                <h2 class="section-title">Workout Calendar</h2>
+                <p class="text-grey mb-3">Track your workout consistency</p>
+
+                <div class="card calendar-card">
+                    <div class="calendar-header">
+                        <button class="btn-icon" id="calPrevMonth" aria-label="Previous month">
+                            <i data-lucide="chevron-left"></i>
+                        </button>
+                        <h3 id="calMonthYear">October 2026</h3>
+                        <button class="btn-icon" id="calNextMonth" aria-label="Next month">
+                            <i data-lucide="chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="calendar-weekdays">
+                        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="calendar-detail hidden" id="calendarDetail">
+                        <h4 id="calDetailDate">--</h4>
+                        <div id="calDetailContent">No workouts recorded</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== PROFILE SECTION ========== -->
+            <section class="section-content" id="section-profile">
+                <h2 class="section-title">Profile</h2>
+                <div class="profile-card">
+                    <div class="profile-avatar-section">
+                        <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150&h=150&fit=crop&crop=face" 
+                             alt="Alex Morgan" class="profile-avatar" width="100" height="100">
+                        <h3 id="profileName">Alex Morgan</h3>
+                        <p class="text-grey" id="profileGoal">Goal: Maintain fitness</p>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <span class="profile-stat-value" id="profileWorkouts">24</span>
+                            <span class="profile-stat-label">Workouts</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="profile-stat-value" id="profileCalories">12,450</span>
+                            <span class="profile-stat-label">Calories Burned</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="profile-stat-value" id="profileStreak">7</span>
+                            <span class="profile-stat-label">Day Streak</span>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <div class="profile-detail-row">
+                            <span class="text-grey">Age</span>
+                            <span id="profileAge">28 years</span>
+                        </div>
+                        <div class="profile-detail-row">
+                            <span class="text-grey">Height</span>
+                            <span id="profileHeight">175 cm</span>
+                        </div>
+                        <div class="profile-detail-row">
+                            <span class="text-grey">Weight</span>
+                            <span id="profileWeight">72 kg</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary mt-2" id="editProfileBtn">
+                        <i data-lucide="edit-3"></i> Edit Profile
+                    </button>
+                </div>
+            </section>
+
+            <!-- ========== SETTINGS SECTION ========== -->
+            <section class="section-content" id="section-settings">
+                <h2 class="section-title">Settings</h2>
+                <div class="settings-group">
+                    <div class="card">
+                        <h3 class="card-title">Preferences</h3>
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <span class="setting-name">Notifications</span>
+                                <span class="text-sm text-grey">Receive workout reminders</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="settingNotifications" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <span class="setting-name">Sound Effects</span>
+                                <span class="text-sm text-grey">Play sounds on completion</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="settingSounds">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <span class="setting-name">Units</span>
+                                <span class="text-sm text-grey">Measurement system</span>
+                            </div>
+                            <select id="settingUnits" class="form-select" aria-label="Select units">
+                                <option value="metric">Metric (kg, cm)</option>
+                                <option value="imperial">Imperial (lb, in)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card mt-2">
+                        <h3 class="card-title">Data Management</h3>
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <span class="setting-name">Reset All Data</span>
+                                <span class="text-sm text-grey">Clear all saved progress and settings</span>
+                            </div>
+                            <button class="btn-sm btn-danger" id="resetAllDataBtn">Reset</button>
+                        </div>
+                    </div>
+                    <div class="card mt-2">
+                        <h3 class="card-title">About</h3>
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <span class="setting-name">FitPlan</span>
+                                <span class="text-sm text-grey">Version 1.0.0 — Personal Fitness & Workout Planner</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ==================== RIGHT PANEL ==================== -->
+        <aside class="right-panel" id="rightPanel">
+            <div class="right-panel-header">
+                <h2 class="right-panel-title">My Daily Plan</h2>
+                <button class="btn-icon" id="toggleRightPanel" aria-label="Toggle panel">
+                    <i data-lucide="panel-right-close"></i>
+                </button>
+            </div>
+
+            <!-- Date Selector -->
+            <div class="date-selector">
+                <button class="btn-icon btn-icon-sm" id="datePrev" aria-label="Previous day">
+                    <i data-lucide="chevron-left"></i>
+                </button>
+                <span class="date-display" id="dateDisplay">Fri, Oct 23</span>
+                <button class="btn-icon btn-icon-sm" id="dateNext" aria-label="Next day">
+                    <i data-lucide="chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Add Activity Button -->
+            <button class="btn-primary btn-full mt-2" id="addActivityBtn">
+                <i data-lucide="plus"></i> Add Activity
+            </button>
+
+            <!-- Meals -->
+            <div class="meals-section mt-3">
+                <h3 class="right-panel-subtitle">Meals</h3>
+                <p class="text-sm text-grey mb-1">Estimated nutritional values</p>
+
+                <div class="meal-card" id="mealBreakfast">
+                    <img src="https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=80&h=80&fit=crop" 
+                         alt="Oatmeal and berries" class="meal-img" width="64" height="64" loading="lazy">
+                    <div class="meal-info">
+                        <span class="meal-name">Oatmeal & Berries</span>
+                        <span class="meal-time">8:00 AM · Breakfast</span>
+                        <span class="meal-cal">~350 kcal</span>
+                    </div>
+                    <button class="btn-icon btn-icon-sm meal-edit" data-meal="breakfast" aria-label="Edit breakfast">
+                        <i data-lucide="pencil"></i>
+                    </button>
+                </div>
+
+                <div class="meal-card" id="mealLunch">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=80&h=80&fit=crop" 
+                         alt="Grilled chicken salad" class="meal-img" width="64" height="64" loading="lazy">
+                    <div class="meal-info">
+                        <span class="meal-name">Grilled Chicken Salad</span>
+                        <span class="meal-time">1:00 PM · Lunch</span>
+                        <span class="meal-cal">~520 kcal</span>
+                    </div>
+                    <button class="btn-icon btn-icon-sm meal-edit" data-meal="lunch" aria-label="Edit lunch">
+                        <i data-lucide="pencil"></i>
+                    </button>
+                </div>
+
+                <div class="meal-card" id="mealDinner">
+                    <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=80&h=80&fit=crop" 
+                         alt="Salmon and vegetables" class="meal-img" width="64" height="64" loading="lazy">
+                    <div class="meal-info">
+                        <span class="meal-name">Salmon & Vegetables</span>
+                        <span class="meal-time">7:00 PM · Dinner</span>
+                        <span class="meal-cal">~480 kcal</span>
+                    </div>
+                    <button class="btn-icon btn-icon-sm meal-edit" data-meal="dinner" aria-label="Edit dinner">
+                        <i data-lucide="pencil"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Nutrition Analysis -->
+            <div class="nutrition-section mt-3">
+                <h3 class="right-panel-subtitle">Nutrition Analysis</h3>
+                <p class="text-sm text-grey mb-2">Estimated daily intake</p>
+
+                <div class="nutrition-bar-group">
+                    <div class="nutrition-bar-item">
+                        <div class="nutrition-bar-header">
+                            <span class="nutrition-bar-label">Protein</span>
+                            <span class="nutrition-bar-value"><span id="nutritionProtein">120</span>g / 150g</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar__fill" id="nutritionProteinBar" style="width:80%;background:#A3E635"></div>
+                        </div>
+                    </div>
+                    <div class="nutrition-bar-item">
+                        <div class="nutrition-bar-header">
+                            <span class="nutrition-bar-label">Carbohydrates</span>
+                            <span class="nutrition-bar-value"><span id="nutritionCarbs">200</span>g / 250g</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar__fill" id="nutritionCarbsBar" style="width:80%;background:#FBBF24"></div>
+                        </div>
+                    </div>
+                    <div class="nutrition-bar-item">
+                        <div class="nutrition-bar-header">
+                            <span class="nutrition-bar-label">Fat</span>
+                            <span class="nutrition-bar-value"><span id="nutritionFat">55</span>g / 65g</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar__fill" id="nutritionFatBar" style="width:85%;background:#F87171"></div>
+                        </div>
+                    </div>
+                    <div class="nutrition-bar-item">
+                        <div class="nutrition-bar-header">
+                            <span class="nutrition-bar-label">Fibre</span>
+                            <span class="nutrition-bar-value"><span id="nutritionFibre">22</span>g / 30g</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar__fill" id="nutritionFibreBar" style="width:73%;background:#60A5FA"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Weight Update Modal -->
+    <div class="modal-overlay hidden" id="weightModal">
+        <div class="modal" role="dialog" aria-labelledby="weightModalTitle" aria-modal="true">
+            <div class="modal-header">
+                <h3 id="weightModalTitle">Update Weight</h3>
+                <button class="btn-icon modal-close" data-modal="weightModal" aria-label="Close"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newWeight">New Weight (kg)</label>
+                    <input type="number" id="newWeight" placeholder="e.g. 72" min="20" max="300" aria-label="Enter new weight">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary modal-close" data-modal="weightModal">Cancel</button>
+                <button class="btn-primary" id="saveWeightBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Water Modal -->
+    <div class="modal-overlay hidden" id="waterModal">
+        <div class="modal" role="dialog" aria-labelledby="waterModalTitle" aria-modal="true">
+            <div class="modal-header">
+                <h3 id="waterModalTitle">Add Custom Water</h3>
+                <button class="btn-icon modal-close" data-modal="waterModal" aria-label="Close"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="customWater">Amount (ml)</label>
+                    <input type="number" id="customWater" placeholder="e.g. 350" min="50" max="2000" aria-label="Enter water amount">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary modal-close" data-modal="waterModal">Cancel</button>
+                <button class="btn-primary" id="saveCustomWater">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Meal Modal -->
+    <div class="modal-overlay hidden" id="mealModal">
+        <div class="modal" role="dialog" aria-labelledby="mealModalTitle" aria-modal="true">
+            <div class="modal-header">
+                <h3 id="mealModalTitle">Edit Meal</h3>
+                <button class="btn-icon modal-close" data-modal="mealModal" aria-label="Close"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="mealName">Meal Name</label>
+                    <input type="text" id="mealName" placeholder="e.g. Grilled Chicken Salad" aria-label="Meal name">
+                </div>
+                <div class="form-group">
+                    <label for="mealTime">Time</label>
+                    <input type="time" id="mealTime" aria-label="Meal time">
+                </div>
+                <div class="form-group">
+                    <label for="mealCalories">Estimated Calories</label>
+                    <input type="number" id="mealCalories" placeholder="e.g. 520" min="0" max="5000" aria-label="Estimated calories">
+                </div>
+                <div class="form-group">
+                    <label for="mealNotes">Notes (optional)</label>
+                    <textarea id="mealNotes" rows="2" placeholder="Any additional notes..." aria-label="Meal notes"></textarea>
+                </div>
+                <input type="hidden" id="mealEditTarget" value="">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary modal-close" data-modal="mealModal">Cancel</button>
+                <button class="btn-primary" id="saveMealBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay hidden" id="profileModal">
+        <div class="modal" role="dialog" aria-labelledby="profileModalTitle" aria-modal="true">
+            <div class="modal-header">
+                <h3 id="profileModalTitle">Edit Profile</h3>
+                <button class="btn-icon modal-close" data-modal="profileModal" aria-label="Close"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="editName">Full Name</label>
+                    <input type="text" id="editName" placeholder="Alex Morgan" aria-label="Full name">
+                </div>
+                <div class="form-group">
+                    <label for="editAge">Age</label>
+                    <input type="number" id="editAge" placeholder="28" min="10" max="120" aria-label="Age">
+                </div>
+                <div class="form-group">
+                    <label for="editHeight">Height (cm)</label>
+                    <input type="number" id="editHeight" placeholder="175" min="50" max="300" aria-label="Height">
+                </div>
+                <div class="form-group">
+                    <label for="editWeight2">Weight (kg)</label>
+                    <input type="number" id="editWeight2" placeholder="72" min="20" max="300" aria-label="Weight">
+                </div>
+                <div class="form-group">
+                    <label for="editGoal">Fitness Goal</label>
+                    <select id="editGoal" aria-label="Fitness goal">
+                        <option value="Lose weight">Lose weight</option>
+                        <option value="Build muscle">Build muscle</option>
+                        <option value="Maintain fitness" selected>Maintain fitness</option>
+                        <option value="Improve endurance">Improve endurance</option>
+                        <option value="General health">General health</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary modal-close" data-modal="profileModal">Cancel</button>
+                <button class="btn-primary" id="saveProfileBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sleep Tracker Modal -->
+    <div class="modal-overlay hidden" id="sleepModal">
+        <div class="modal" role="dialog" aria-labelledby="sleepModalTitle" aria-modal="true">
+            <div class="modal-header">
+                <h3 id="sleepModalTitle">Sleep Tracker</h3>
+                <button class="btn-icon modal-close" data-modal="sleepModal" aria-label="Close"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="sleepHours">Hours Slept</label>
+                    <input type="number" id="sleepHours" placeholder="e.g. 7.5" min="0" max="24" step="0.5" aria-label="Hours slept">
+                </div>
+                <div class="form-group">
+                    <label for="sleepQuality">Sleep Quality</label>
+                    <select id="sleepQuality" aria-label="Sleep quality">
+                        <option value="poor">Poor</option>
+                        <option value="fair">Fair</option>
+                        <option value="good" selected>Good</option>
+                        <option value="excellent">Excellent</option>
+                    </select>
+                </div>
+                <div class="sleep-summary hidden" id="sleepSummary">
+                    <h4>Last Entry</h4>
+                    <p id="sleepSummaryText">--</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary modal-close" data-modal="sleepModal">Cancel</button>
+                <button class="btn-primary" id="saveSleepBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Activity Modal -->
+    <div class="modal-overlay hidden" id="activityModal">
+        <div class="modal" role="dialog" aria-labelledby="activityModalTitle" aria-modal="true">
+            <div class="modal-header">
+                <h3 id="activityModalTitle">Add Activity</h3>
+                <button class="btn-icon modal-close" data-modal="activityModal" aria-label="Close"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="activityName">Activity Name</label>
+                    <input type="text" id="activityName" placeholder="e.g. Morning Run" aria-label="Activity name">
+                </div>
+                <div class="form-group">
+                    <label for="activityDuration">Duration (minutes)</label>
+                    <input type="number" id="activityDuration" placeholder="e.g. 30" min="1" max="600" aria-label="Duration">
+                </div>
+                <div class="form-group">
+                    <label for="activityCalories">Calories Burned (estimated)</label>
+                    <input type="number" id="activityCalories" placeholder="e.g. 200" min="0" max="5000" aria-label="Calories burned">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary modal-close" data-modal="activityModal">Cancel</button>
+                <button class="btn-primary" id="saveActivityBtn">Add Activity</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay hidden" id="confirmModal">
+        <div class="modal modal-sm" role="alertdialog" aria-labelledby="confirmModalTitle" aria-modal="true">
+            <div class="modal-header">
+                <h3 id="confirmModalTitle">Confirm Action</h3>
+                <button class="btn-icon modal-close" data-modal="confirmModal" aria-label="Close"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary modal-close" data-modal="confirmModal">Cancel</button>
+                <button class="btn-danger" id="confirmActionBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
